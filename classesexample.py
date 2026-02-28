@@ -1,26 +1,46 @@
-class CreditCardApplication:
-    def __init__(self, name, age, income):
-        self.name = name
-        self.age = age
-        self.income = income
+from dataclasses import dataclass, field
+
+@dataclass()
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Optional
 
 
-class CreditCardProcessor:
-    def process_application(self, application):
-        if application.age < 18:
-            return "Application Rejected: Applicant must be at least 18 years old."
-        elif application.income < 20000:
-            return "Application Rejected: Applicant must have an income of at least $20,000."
-        else:
-            return "Application Approved: Congratulations, you are eligible for a credit card!"
-        
-if __name__ == "__main__":
-    application1 = CreditCardApplication("Alice", 25, 50000)
-    application2 = CreditCardApplication("Bob", 17, 30000)
-    application3 = CreditCardApplication("Charlie", 30, 15000)
+@dataclass
+class Customer:
+    customer_id: str
+    first_name: str
+    last_name: str
+    email: str
+    phone: Optional[str]
+    date_of_birth: str
+    created_at: datetime = field(default_factory=datetime.utcnow)
 
-    processor = CreditCardProcessor()
-    
-    print(processor.process_application(application1))  # Should approve
-    print(processor.process_application(application2))  # Should reject due to age
-    print(processor.process_application(application3))  # Should reject due to income
+    def __post_init__(self):
+        # Rule: customer_id cannot be empty
+        if not self.customer_id.strip():
+            raise ValueError("customer_id cannot be empty")
+
+        # Rule: email must contain '@'
+        if "@" not in self.email:
+            raise ValueError("Invalid email address")
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}"
+
+c = Customer(
+    customer_id="BARC12345",
+    first_name="Madhu",
+    last_name="Sudhanan",
+    email="madhu@example.com",
+    phone="1234567890",
+    date_of_birth="1995-01-01"
+)
+
+
+
+
+
+
+
